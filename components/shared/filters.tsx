@@ -40,8 +40,32 @@ export const Filters: React.FC<Props> = ({ className }) => {
         <CheckboxFiltersGroup
         title="Производитель:"
         className="mt-5"
-        limit={6}
+        limit={5}
         defaultItems={[
+          {
+            text: 'Винар',
+            value: '1',
+          },
+          {
+            text: 'ВИТА-ПУЛ',
+            value: '2',
+          },
+          {
+            text: 'КлиниПак',
+            value: '3',
+          },
+          {
+            text: 'Медитек',
+            value: '4',
+          },
+          {
+            text: 'Навтекс',
+            value: '5',
+          },
+          {
+            text: 'Ньюфарм',
+            value: '6',
+          },
           {
             text: 'Винар',
             value: '1',
@@ -68,6 +92,30 @@ export const Filters: React.FC<Props> = ({ className }) => {
           },
         ]}
         items={[
+          {
+            text: 'Винар',
+            value: '1',
+          },
+          {
+            text: 'ВИТА-ПУЛ',
+            value: '2',
+          },
+          {
+            text: 'КлиниПак',
+            value: '3',
+          },
+          {
+            text: 'Медитек',
+            value: '4',
+          },
+          {
+            text: 'Навтекс',
+            value: '5',
+          },
+          {
+            text: 'Ньюфарм',
+            value: '6',
+          },
           {
             text: 'Винар',
             value: '1',
