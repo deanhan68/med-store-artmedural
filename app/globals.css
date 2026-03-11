@@ -5,6 +5,15 @@
 @custom-variant blue (&:is(.blue *));
 
 
+html {
+  scroll-behavior: smooth;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
 
 @theme inline {
   --color-background: var(--background);

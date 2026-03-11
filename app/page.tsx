@@ -39,7 +39,7 @@ export default function Home() {
                   items: [{price: 550}],
                 },
                 {
-                  id: 1,
+                  id: 2,
                   name: "BENOVY LATEX CHLORINATED",
                   imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t02/t21/t311/fffc20728b52ed9761d3903053422c17-1100x1100.png",
                   price: 550,
@@ -48,16 +48,16 @@ export default function Home() {
                 ]} 
                   categoryId={1} />
 
-                <ProductsGroupList title="Контроль продуктов питания" items={[
+                <ProductsGroupList title="Медецинская одежда" items={[
                 {
                   id: 1,
-                  name: "Молконт-рН",
-                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t08/312----800x1000-1100x1100h.jpg",
+                  name: "Маска",
+                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t02/t29/mav_4004-1100x1100w.jpg",
                   price: 350,
                   items: [{price: 350}],
                 },
                 {
-                  id: 1,
+                  id: 2,
                   name: "Молконт-рН",
                   imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t08/312----800x1000-1100x1100h.jpg",
                   price: 350,
@@ -67,7 +67,7 @@ export default function Home() {
 
                 
                 ]} 
-                  categoryId={1} />
+                  categoryId={2} />
             </div>
           </div>
         </div>
