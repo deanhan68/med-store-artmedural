@@ -6,7 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "prisma:reset": "prisma migrate reset",
+    "prisma:push": "prisma db push",
+    "prisma:preview": "prisma db pull",
+    "prisma:seed": "prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -20,6 +30,7 @@
     "react-dom": "19.2.3",
     "react-use": "^17.6.0",
     "tailwind-merge": "^3.5.0",
+    "ts-node": "^10.9.2",
     "vaul": "^1.1.2",
     "zustand": "^5.0.11"
   },
