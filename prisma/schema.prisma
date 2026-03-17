@@ -35,6 +35,9 @@ model Category {
   name String @unique
   product Product[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
 }
 
 model Product {
@@ -68,11 +71,10 @@ model ProductItem {
 
 }
 
-model CountProduct {
+model CountProduct {  // ingridients
   id        Int      @id @default(autoincrement())
   name String
   price Int
-  imageUrl String
 
 
   product Product[]
@@ -110,7 +112,9 @@ model CartItem {
   
 
   quantity Int
-  countProduct CountProduct[]
+
+
+  countProduct CountProduct[] // ingridients
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
