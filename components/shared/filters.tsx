@@ -7,6 +7,7 @@ import { Input } from '../ui/input';
 import { Slider } from '../ui';
 import { RangeSlider } from './range-slider';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
+import { useFilterQuantiti } from '@/hooks/useFilterQuantiti';
 
 
 interface Props {
@@ -14,6 +15,10 @@ interface Props {
 }
 
 export const Filters: React.FC<Props> = ({ className }) => {
+  const { quantiti } = useFilterQuantiti();
+
+  const items = quantiti.map((item) => ({value: String(item.id), text: item.name}));
+
   return (
    <div className={className}>
         <Title text="Фильтрация" size="sm" className="mb-5 font-bold" />
@@ -38,109 +43,11 @@ export const Filters: React.FC<Props> = ({ className }) => {
 
         
         <CheckboxFiltersGroup
-        title="Производитель:"
+        title="Колчество:"
         className="mt-5"
-        limit={5}
-        defaultItems={[
-          {
-            text: 'Винар',
-            value: '1',
-          },
-          {
-            text: 'ВИТА-ПУЛ',
-            value: '2',
-          },
-          {
-            text: 'КлиниПак',
-            value: '3',
-          },
-          {
-            text: 'Медитек',
-            value: '4',
-          },
-          {
-            text: 'Навтекс',
-            value: '5',
-          },
-          {
-            text: 'Ньюфарм',
-            value: '6',
-          },
-          {
-            text: 'Винар',
-            value: '1',
-          },
-          {
-            text: 'ВИТА-ПУЛ',
-            value: '2',
-          },
-          {
-            text: 'КлиниПак',
-            value: '3',
-          },
-          {
-            text: 'Медитек',
-            value: '4',
-          },
-          {
-            text: 'Навтекс',
-            value: '5',
-          },
-          {
-            text: 'Ньюфарм',
-            value: '6',
-          },
-        ]}
-        items={[
-          {
-            text: 'Винар',
-            value: '1',
-          },
-          {
-            text: 'ВИТА-ПУЛ',
-            value: '2',
-          },
-          {
-            text: 'КлиниПак',
-            value: '3',
-          },
-          {
-            text: 'Медитек',
-            value: '4',
-          },
-          {
-            text: 'Навтекс',
-            value: '5',
-          },
-          {
-            text: 'Ньюфарм',
-            value: '6',
-          },
-          {
-            text: 'Винар',
-            value: '1',
-          },
-          {
-            text: 'ВИТА-ПУЛ',
-            value: '2',
-          },
-          {
-            text: 'КлиниПак',
-            value: '3',
-          },
-          {
-            text: 'Медитек',
-            value: '4',
-          },
-          {
-            text: 'Навтекс',
-            value: '5',
-          },
-          {
-            text: 'Ньюфарм',
-            value: '6',
-          },
-        ]}
+        limit={2}
+        defaultItems={items.slice(0, 3)}
+        items={ items}
       />      
    </div>
   );
