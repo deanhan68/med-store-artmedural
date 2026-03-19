@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const Filters: React.FC<Props> = ({ className }) => {
-  const { quantiti } = useFilterQuantiti();
+  const { quantiti, loading, onAddId, selectedIds } = useFilterQuantiti();
 
   const items = quantiti.map((item) => ({value: String(item.id), text: item.name}));
 
@@ -26,8 +26,8 @@ export const Filters: React.FC<Props> = ({ className }) => {
         {/* Вверхние чекбоксы */}
 
         <div className="flex flex-col gap-4">
-            <FilterCheckbox text="Стерильные" value="1" />
-            <FilterCheckbox text="Нестерильные" value="2" />
+            <FilterCheckbox name="qwe" text="Стерильные" value="1" />
+            <FilterCheckbox name="qwe2" text="Нестерильные" value="2" />
         </div>
 
         {/* Фильтр цен */}
@@ -44,10 +44,14 @@ export const Filters: React.FC<Props> = ({ className }) => {
         
         <CheckboxFiltersGroup
         title="Колчество:"
+        name="quantiti"
         className="mt-5"
         limit={2}
         defaultItems={items.slice(0, 3)}
-        items={ items}
+        items={items}
+        loading={loading}
+        onClickCheckbox={onAddId}
+        selectedIds={selectedIds }
       />      
    </div>
   );

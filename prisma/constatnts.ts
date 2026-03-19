@@ -32,11 +32,11 @@ export const countProduct = [
     },
     {
         name: "x5",
-        price: 300,
+        price: 700,
     },
     {
         name: "x10",
-        price: 300,
+        price: 1000,
     },    
 ].map((obj, index) => ({id: index + 1, ...obj}));
 
