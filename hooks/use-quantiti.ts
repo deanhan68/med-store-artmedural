@@ -1,26 +1,12 @@
-import { CountProduct } from "@prisma/client"
 import { Api } from "@/services/api-client";
+import { CountProduct } from "@prisma/client";
 import React from "react";
-import { useSet } from "react-use";
 
-
-interface ReturnProps {
-    quantiti: CountProduct[];
-    loading: boolean;
-    selectedIds: Set<string>;
-    onAddId  : (id: string) => void;
-}
-
-
-
-export const useFilterQuantiti = (): ReturnProps => {
+export const useQuantiti = () => {
     const [quantiti, setQuantiti] = React.useState<CountProduct[]>([]);
     const [loading, setLoading] = React.useState(true);
 
-    const [selectedIds, {  toggle }] = useSet(new Set<string>([]));
 
-
-    
     React.useEffect(() => {
         async function fetchCountProduct() {
             try {
@@ -40,5 +26,5 @@ export const useFilterQuantiti = (): ReturnProps => {
 
     },[])
 
-    return {quantiti, loading, onAddId : toggle, selectedIds};
+    return {quantiti, loading};
 }

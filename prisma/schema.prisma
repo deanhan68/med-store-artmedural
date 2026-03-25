@@ -71,7 +71,7 @@ model ProductItem {
 
 }
 
-model CountProduct {  // ingridients
+model CountProduct {  // ingridients //ДОПЫ
   id        Int      @id @default(autoincrement())
   name String
   price Int

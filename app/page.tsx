@@ -45,6 +45,13 @@ export default function Home() {
                   price: 550,
                   items: [{price: 550}],
                 },
+                {
+                  id: 3,
+                  name: "BENOVY LATEX CHLORINATED",
+                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t02/t21/t311/fffc20728b52ed9761d3903053422c17-1100x1100.png",
+                  price: 550,
+                  items: [{price: 550}],
+                },
                 ]} 
                   categoryId={1} />
 
@@ -58,6 +65,13 @@ export default function Home() {
                 },
                 {
                   id: 2,
+                  name: "Молконт-рН",
+                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t08/312----800x1000-1100x1100h.jpg",
+                  price: 350,
+                  items: [{price: 350}],
+                },
+                {
+                  id: 3,
                   name: "Молконт-рН",
                   imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t08/312----800x1000-1100x1100h.jpg",
                   price: 350,

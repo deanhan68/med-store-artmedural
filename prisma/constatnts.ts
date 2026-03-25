@@ -21,23 +21,28 @@ export const categories = [
     
 ]
 
-export const countProduct = [
+export const countProduct = [ //ДОПЫ
     {
-        name: "x1",
+        name: "С дозатором",
         price: 100,
     },
     {
-        name: "x2",
+        name: "Индикаторные полоски (тест)",
+        price: 150,
+    }, 
+    {
+        name: "Мерный стакан",
+        price: 250,
+    },
+    {
+        name: "Насадка-распылитель",
         price: 300,
     },
     {
-        name: "x5",
-        price: 700,
+        name: "Салфетки для обработки (уп)",
+        price: 250,
     },
-    {
-        name: "x10",
-        price: 1000,
-    },    
+       
 ].map((obj, index) => ({id: index + 1, ...obj}));
 
 
