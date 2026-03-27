@@ -1,12 +1,24 @@
-import { Categories, CheckboxFiltersGroup, Container, Filters, SortPopup, Title } from "@/components/shared";
-import { ProductCard } from "@/components/shared/product-card";
+import { Container, Filters, Title } from "@/components/shared";
 import { ProductsGroupList } from "@/components/shared/product-group-list";
 import { TopBar } from "@/components/shared/top-bar";
-import { Button } from "@/components/ui/button";
-import { ImageUp } from "lucide-react";
-import Image from "next/image";
+import { prisma } from "@/prisma/prisma-client";
 
-export default function Home() {
+
+export default async function Home() {
+
+  const categories = await prisma.category.findMany({
+    include : {
+      product: {
+        include : {
+          countProduct: true,
+          items: true,
+        },
+      },
+    }
+  })
+
+
+
   const newLocal = "flex flex-col gap-16";
 
   return (
@@ -15,7 +27,7 @@ export default function Home() {
         <Title text="Вся продукция" size="lg" className="font-extrabold"/>
       </Container>
 
-      <TopBar/>
+      <TopBar categories={categories.filter((category) => category.product.length > 0)}/>
 
       <Container className="mt-8 pb-14">
         <div className="flex gap-[80px]">
@@ -30,58 +42,18 @@ export default function Home() {
           {/* Список товаров */}
           <div className="flex-1">
             <div className="flex flex-col gap-16">
-              <ProductsGroupList title="Гигиена" items={[
-                {
-                  id: 1,
-                  name: "BENOVY LATEX CHLORINATED",
-                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t02/t21/t311/fffc20728b52ed9761d3903053422c17-1100x1100.png",
-                  price: 550,
-                  items: [{price: 550}],
-                },
-                {
-                  id: 2,
-                  name: "BENOVY LATEX CHLORINATED",
-                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t02/t21/t311/fffc20728b52ed9761d3903053422c17-1100x1100.png",
-                  price: 550,
-                  items: [{price: 550}],
-                },
-                {
-                  id: 3,
-                  name: "BENOVY LATEX CHLORINATED",
-                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t02/t21/t311/fffc20728b52ed9761d3903053422c17-1100x1100.png",
-                  price: 550,
-                  items: [{price: 550}],
-                },
-                ]} 
-                  categoryId={1} />
-
-                <ProductsGroupList title="Медецинская одежда" items={[
-                {
-                  id: 1,
-                  name: "Маска",
-                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t02/t29/mav_4004-1100x1100w.jpg",
-                  price: 350,
-                  items: [{price: 350}],
-                },
-                {
-                  id: 2,
-                  name: "Молконт-рН",
-                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t08/312----800x1000-1100x1100h.jpg",
-                  price: 350,
-                  items: [{price: 350}],
-                },
-                {
-                  id: 3,
-                  name: "Молконт-рН",
-                  imageUrl: "http://artmedural.ru/image/cache/catalog/tovar/t08/312----800x1000-1100x1100h.jpg",
-                  price: 350,
-                  items: [{price: 350}],
-                },
-                
-
-                
-                ]} 
-                  categoryId={2} />
+              {
+                categories.map((category) => (
+                  category.product.length > 0 && (
+                    <ProductsGroupList
+                      key={category.id}
+                      title={category.name}
+                      categoryId={category.id}
+                      items={category.product}
+                    />
+                  )
+                ))
+              }
             </div>
           </div>
         </div>
