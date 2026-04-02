@@ -1,6 +1,6 @@
 // app/product/[id]/page.tsx
-import { Container, ProductImage, Title } from "@/components/shared";
-import { GroupVariants } from "@/components/shared/group-variants";
+import { Container, GigienImage, Title } from "@/shared/components/shared";
+import { GroupVariants } from "@/shared/components/shared/group-variants";
 import { prisma } from "@/prisma/prisma-client";
 import { notFound } from "next/navigation";
 
@@ -19,7 +19,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     return (
     <Container className="flex  my-10">
         <div className="flex flex-1 ">
-            <ProductImage imageUrl={product.imageUrl} size={40} />
+            <GigienImage imageUrl={product.imageUrl} size={40} />
         </div>
 
         <div className="w-[490px] bg-[#f7f6f5] p-7 ">
