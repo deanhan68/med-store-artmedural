@@ -26,7 +26,7 @@ export const ChooseProductForm: React.FC<Props> = ({
     onClickAdd, 
     className 
 }) => {
-
+    
     const textDetails = 'Дезинфекция, совмещенная с предстерилизационной очисткой,';
     const totalPrice = 350;
 

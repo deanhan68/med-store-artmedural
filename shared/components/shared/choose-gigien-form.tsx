@@ -6,8 +6,10 @@ import { GigienImage } from './gigien-image';
 import { Button } from '../ui';
 import { GroupVariants } from './group-variants';
 import { GigienType, gigienTypes, GigienVolue, gigienVolues } from '@/shared/constants/gigien';
-import { CountProduct } from '@prisma/client';
+import { CountProduct, ProductItem } from '@prisma/client';
 import { QuantitiItem } from './quantiti-item';
+import { useSet } from 'react-use';
+import { ProductWithRelations } from '@/@types/prisma';
 
 
 
@@ -18,8 +20,8 @@ interface Props {
     imageUrl: string;
     name:string;
     countProduct: CountProduct[];
-    items?: any[];
-    onClickAdd?: VoidFunction;
+    items: ProductItem[] ;
+    onClickAddCart?: VoidFunction;
     className?: string;
     
 
@@ -27,26 +29,39 @@ interface Props {
 
 export const ChooseGigienForm: React.FC<Props> = ({  
     name, 
+    items,
     imageUrl,
-    onClickAdd, 
+    onClickAddCart, 
     countProduct,
     className, 
 }) => {
 
 
-    const [volue, setVolue] = React.useState<GigienVolue>(20)
+    const [volue, setVolue] = React.useState<number>(items[0]?.size || 500);
     const [gigienType, setGigienType] = React.useState<GigienType>(1)
-
+    const [selectedCountProducts, {toggle : addQuantiti}] = useSet(new Set<number>([]))
 
     const textDetails = 'Дезинфекция, совмещенная с предстерилизационной очисткой,';
-    const totalPrice = 350;
+    
+    const gigienPrice = (items.find((item) => item.productType === 
+    gigienType && item.size === volue)?.price ?? 0) + (gigienType === 1 ? 100 : 0);
 
+    const totalCountProductPrice = countProduct
+      .filter((item) => selectedCountProducts.has(item.id))
+      .reduce((acc, item) => acc + item.price, 0);
+    
+    // 5. Итоговая цена (как totalPrice)
+    const totalPrice = gigienPrice + totalCountProductPrice;
 
+    const handleClick = () => {
+      onClickAddCart?.();
+    }
+  
     return <div className={cn(className, 'flex w-full h-full')}>
 
     {/* ЛЕВАЯ ЧАСТЬ */}
     <div className="flex items-center justify-center w-1/2 overflow-hidden">
-      <GigienImage imageUrl={imageUrl} size={volue} />
+      <GigienImage imageUrl={imageUrl} size={volue as 500 | 1000 | 2000} />
     </div>
 
     {/* ПРАВАЯ ЧАСТЬ */}
@@ -71,7 +86,9 @@ export const ChooseGigienForm: React.FC<Props> = ({
               name={countProduct.name} 
               price={countProduct.price} 
               imageUrl={countProduct.name}
-              onClick={onClickAdd ?? (() => {})}
+              onClick={() => addQuantiti(countProduct.id)}
+              active={selectedCountProducts.has(countProduct.id)}
+
             >
               
             </QuantitiItem>

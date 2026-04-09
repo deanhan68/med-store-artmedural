@@ -2,16 +2,17 @@
 
 
 export const mapGigienVolue = {
-    20 : '0.5 л.',
-    30: '1 л.',
-    40: '2 л.',
+    500 : '0.5 л.',
+    1000: '1 л.',
+    2000: '2 л.',
 } as const;
 
 
 export const mapGigienType = {
-    1: 'Cтерильно',
-    2: 'Не стерильно',
+    1: 'Стерильный блок',
+    2: 'Стандартная упаковка',
 } as const;
+
 
 
 export const gigienVolues = Object.entries(mapGigienVolue).map(([value, name]) => ({

@@ -6,10 +6,10 @@ import { mapGigienType, mapGigienVolue } from "@/shared/constants/gigien";
 interface Props {
     className?: string;
     imageUrl: string;
-    size?: 20 | 30 | 40;
+    size?: 500 | 1000 | 2000;
 }
 
-export const GigienImage: React.FC<Props> = ({ imageUrl, size = 20, className }) => {
+export const GigienImage: React.FC<Props> = ({ imageUrl, size = 500, className }) => {
     return (
         <div className={cn(
             'flex items-center justify-center flex-1 relative w-full',
@@ -47,9 +47,9 @@ export const GigienImage: React.FC<Props> = ({ imageUrl, size = 20, className })
                 className={cn(
                     'relative transition-all duration-300 ease-in-out z-10 object-contain',
                     {
-                        'w-[350px] h-[350px]': size === 20,
-                        'w-[450px] h-[450px]': size === 30,
-                        'w-[550px] h-[550px]': size === 40,
+                        'w-[350px] h-[350px]': size === 500,
+                        'w-[450px] h-[450px]': size === 1000,
+                        'w-[550px] h-[550px]': size === 2000,
                     }
                 )}
             />

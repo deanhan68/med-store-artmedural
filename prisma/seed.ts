@@ -16,7 +16,7 @@ const generateProductItem = ({
 }: {
   productId: number,
   productType?: 1 | 2, // стерильные | не стерильыне
-  size?: 200 | 500 | 1000 | 2500 | 5000, // объем
+  size?:  500 | 1000 | 2000 , // объем
 }
 ) => {
   return {
@@ -101,17 +101,31 @@ async function up() {
   await prisma.productItem.createMany({
     data :[
 
-      // АВАНСЕПТ АКТИВ
-      generateProductItem ({productId: gigiena1.id, productType: 1, size: 1000,}), // стерильные
-      generateProductItem ({productId: gigiena1.id, productType: 1, size: 500,}), // стерильные
 
-      // Кутасепт Ф
-      generateProductItem ({productId: gigiena2.id, productType: 2, size: 5000,}), // не стерильный
+      // АВАНСЕПТ АКТИВ (Type 1 - Стерильно, Type 2 - Не стерильно)
+    { productId: gigiena1.id, productType: 1, size: 500, price: 300 },
+    { productId: gigiena1.id, productType: 1, size: 1000, price: 550 },
+    { productId: gigiena1.id, productType: 1, size: 2000, price: 900 },
+    // Чтобы при смене типа цена НЕ менялась, ставим те же цены для Type 2
+    { productId: gigiena1.id, productType: 2, size: 500, price: 300 },
+    { productId: gigiena1.id, productType: 2, size: 1000, price: 550 },
+    { productId: gigiena1.id, productType: 2, size: 2000, price: 900 },
 
-      // Фолицид Ультра
-      generateProductItem ({productId: gigiena3.id, productType: 1, size: 200,}),// стерильные
-      generateProductItem ({productId: gigiena3.id, productType: 1, size: 500,}), // стерильные
-      generateProductItem ({productId: gigiena3.id, productType: 1, size: 1000,}), // стерильные
+    // КУТАСЕПТ Ф
+    { productId: gigiena2.id, productType: 1, size: 500, price: 250 },
+    { productId: gigiena2.id, productType: 1, size: 1000, price: 450 },
+    { productId: gigiena2.id, productType: 1, size: 2000, price: 800 },
+    { productId: gigiena2.id, productType: 2, size: 500, price: 250 },
+    { productId: gigiena2.id, productType: 2, size: 1000, price: 450 },
+    { productId: gigiena2.id, productType: 2, size: 2000, price: 800 },
+
+    // ФОЛИЦИД УЛЬТРА
+    { productId: gigiena3.id, productType: 1, size: 500, price: 400 },
+    { productId: gigiena3.id, productType: 1, size: 1000, price: 750 },
+    { productId: gigiena3.id, productType: 1, size: 2000, price: 1300 },
+    { productId: gigiena3.id, productType: 2, size: 500, price: 400 },
+    { productId: gigiena3.id, productType: 2, size: 1000, price: 750 },
+    { productId: gigiena3.id, productType: 2, size: 2000, price: 1300 },
 
       // Остальные продукты
       generateProductItem ({productId:1}),

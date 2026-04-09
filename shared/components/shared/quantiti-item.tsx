@@ -30,7 +30,7 @@ export const QuantitiItem: React.FC<Props> = ({
         )} 
         onClick={onClick}>
         { active && <CircleCheck className="absolute top-2 right-2 text-primary" />}
-        <span className="text-base mb-1">{name}</span>
+        <span className="text-base mb-1 mt-8">{name}</span>
         <span className="text-sm mb-1 font-semibold">{price} ₽</span>
 
 
