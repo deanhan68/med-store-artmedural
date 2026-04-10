@@ -5,11 +5,11 @@ import { cn } from '@/shared/lib/utils';
 import { GigienImage } from './gigien-image';
 import { Button } from '../ui';
 import { GroupVariants } from './group-variants';
-import { GigienType, gigienTypes, GigienVolue, gigienVolues } from '@/shared/constants/gigien';
+import { GigienType, gigienTypes, GigienVolue, gigienVolues, mapGigienType } from '@/shared/constants/gigien';
 import { CountProduct, ProductItem } from '@prisma/client';
 import { QuantitiItem } from './quantiti-item';
-import { useSet } from 'react-use';
-import { ProductWithRelations } from '@/@types/prisma';
+import { useGigienOptions } from '@/shared/hooks';
+import { getGigienDetails } from '@/shared/lib';
 
 
 
@@ -36,26 +36,31 @@ export const ChooseGigienForm: React.FC<Props> = ({
     className, 
 }) => {
 
+    // хук настроек
+    const {volue, gigienType, selectedCountProducts, availableVolues, setVolue, setGigienType, addQuantiti } =
+     useGigienOptions(items);
 
-    const [volue, setVolue] = React.useState<number>(items[0]?.size || 500);
-    const [gigienType, setGigienType] = React.useState<GigienType>(1)
-    const [selectedCountProducts, {toggle : addQuantiti}] = useSet(new Set<number>([]))
+    // Калькуляция
 
-    const textDetails = 'Дезинфекция, совмещенная с предстерилизационной очисткой,';
+    const {totalPrice, textDetails} = getGigienDetails(
+      gigienType,  
+      volue, 
+      items, 
+      countProduct, 
+      selectedCountProducts
+    );
     
-    const gigienPrice = (items.find((item) => item.productType === 
-    gigienType && item.size === volue)?.price ?? 0) + (gigienType === 1 ? 100 : 0);
 
-    const totalCountProductPrice = countProduct
-      .filter((item) => selectedCountProducts.has(item.id))
-      .reduce((acc, item) => acc + item.price, 0);
-    
-    // 5. Итоговая цена (как totalPrice)
-    const totalPrice = gigienPrice + totalCountProductPrice;
 
     const handleClick = () => {
       onClickAddCart?.();
+      console.log({
+        volue,
+        gigienType,
+        countProduct: selectedCountProducts,
+      });
     }
+
   
     return <div className={cn(className, 'flex w-full h-full')}>
 
@@ -74,7 +79,7 @@ export const ChooseGigienForm: React.FC<Props> = ({
 
 
       <div className='flex flex-col gap-1 m-2'>
-        <GroupVariants items={gigienVolues} value={String(volue)} onClick={value => setVolue(Number(value) as GigienVolue)}/>
+        <GroupVariants items={availableVolues} value={String(volue)} onClick={value => setVolue(Number(value) as GigienVolue)}/>
         <GroupVariants items={gigienTypes} value={String(gigienType)} onClick={value => setGigienType(Number(value) as GigienType)}/>
       </div>
 
@@ -105,7 +110,9 @@ export const ChooseGigienForm: React.FC<Props> = ({
       */}
 
 
-      <Button className="h-[55px] px-10 text-base rounded-[11px] w-full mt-30 ">
+      <Button 
+        onClick={handleClick} 
+        className="h-[55px] px-10 text-base rounded-[11px] w-full mt-30 ">
         Добавить в корзину за {totalPrice} ₽
       </Button>
     </div>

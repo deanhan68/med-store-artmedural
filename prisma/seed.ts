@@ -102,32 +102,35 @@ async function up() {
     data :[
 
 
-      // АВАНСЕПТ АКТИВ (Type 1 - Стерильно, Type 2 - Не стерильно)
-    { productId: gigiena1.id, productType: 1, size: 500, price: 300 },
-    { productId: gigiena1.id, productType: 1, size: 1000, price: 550 },
-    { productId: gigiena1.id, productType: 1, size: 2000, price: 900 },
-    // Чтобы при смене типа цена НЕ менялась, ставим те же цены для Type 2
-    { productId: gigiena1.id, productType: 2, size: 500, price: 300 },
-    { productId: gigiena1.id, productType: 2, size: 1000, price: 550 },
-    { productId: gigiena1.id, productType: 2, size: 2000, price: 900 },
+          // АВАНСЕПТ АКТИВ
+      // Стерильный (Type 1) - убираем 0.5 л, оставляем только крупные
+      { productId: gigiena1.id, productType: 1, size: 1000, price: 550 },
+      { productId: gigiena1.id, productType: 1, size: 2000, price: 900 },
 
-    // КУТАСЕПТ Ф
-    { productId: gigiena2.id, productType: 1, size: 500, price: 250 },
-    { productId: gigiena2.id, productType: 1, size: 1000, price: 450 },
-    { productId: gigiena2.id, productType: 1, size: 2000, price: 800 },
-    { productId: gigiena2.id, productType: 2, size: 500, price: 250 },
-    { productId: gigiena2.id, productType: 2, size: 1000, price: 450 },
-    { productId: gigiena2.id, productType: 2, size: 2000, price: 800 },
+      // Не стерильный (Type 2) - есть всё
+      { productId: gigiena1.id, productType: 2, size: 500, price: 300 },
+      { productId: gigiena1.id, productType: 2, size: 1000, price: 550 },
+      { productId: gigiena1.id, productType: 2, size: 2000, price: 900 },
 
-    // ФОЛИЦИД УЛЬТРА
-    { productId: gigiena3.id, productType: 1, size: 500, price: 400 },
-    { productId: gigiena3.id, productType: 1, size: 1000, price: 750 },
-    { productId: gigiena3.id, productType: 1, size: 2000, price: 1300 },
-    { productId: gigiena3.id, productType: 2, size: 500, price: 400 },
-    { productId: gigiena3.id, productType: 2, size: 1000, price: 750 },
-    { productId: gigiena3.id, productType: 2, size: 2000, price: 1300 },
+      // КУТАСЕПТ Ф
+      // Стерильный (Type 1) - только 0.5 л (как ты и хотел для теста)
+      { productId: gigiena2.id, productType: 1, size: 500, price: 250 },
 
-      // Остальные продукты
+      // Не стерильный (Type 2) - есть всё
+      { productId: gigiena2.id, productType: 2, size: 500, price: 250 },
+      { productId: gigiena2.id, productType: 2, size: 1000, price: 450 },
+      { productId: gigiena2.id, productType: 2, size: 2000, price: 800 },
+
+      // ФОЛИЦИД УЛЬТРА
+      // Стерильный (Type 1) - ТЕПЕРЬ ТОЛЬКО ОДНА УПАКОВКА (например, 2 л)
+      { productId: gigiena3.id, productType: 1, size: 2000, price: 1300 },
+
+      // Не стерильный (Type 2) - А тут оставим всё, чтобы был контраст
+      { productId: gigiena3.id, productType: 2, size: 500, price: 400 },
+      { productId: gigiena3.id, productType: 2, size: 1000, price: 750 },
+      { productId: gigiena3.id, productType: 2, size: 2000, price: 1300 },
+
+            // Остальные продукты
       generateProductItem ({productId:1}),
       generateProductItem ({productId:2}),
       generateProductItem ({productId:3}),
