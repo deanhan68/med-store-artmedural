@@ -12,10 +12,6 @@ import { useGigienOptions } from '@/shared/hooks';
 import { getGigienDetails } from '@/shared/lib';
 
 
-
-
-
-
 interface Props {
     imageUrl: string;
     name:string;
@@ -41,7 +37,6 @@ export const ChooseGigienForm: React.FC<Props> = ({
      useGigienOptions(items);
 
     // Калькуляция
-
     const {totalPrice, textDetails} = getGigienDetails(
       gigienType,  
       volue, 
@@ -49,8 +44,6 @@ export const ChooseGigienForm: React.FC<Props> = ({
       countProduct, 
       selectedCountProducts
     );
-    
-
 
     const handleClick = () => {
       onClickAddCart?.();
@@ -60,8 +53,7 @@ export const ChooseGigienForm: React.FC<Props> = ({
         countProduct: selectedCountProducts,
       });
     }
-
-  
+    
     return <div className={cn(className, 'flex w-full h-full')}>
 
     {/* ЛЕВАЯ ЧАСТЬ */}

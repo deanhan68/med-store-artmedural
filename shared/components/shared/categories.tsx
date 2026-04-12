@@ -3,8 +3,7 @@
 import { cn } from '@/shared/lib/utils';
 import { useCategoryStore } from '@/shared/store/category';
 import { Category } from '@prisma/client';
-import { IdCard } from 'lucide-react';
-import Link from 'next/link';
+
 import React from 'react';
 
 interface Props {

@@ -12,6 +12,12 @@ export { GigienImage } from "./gigien-image";
 export { ChooseProductForm } from "./choose-product-form";
 export { ProductDefaultImage } from "./product-default-image";
 export { ChooseGigienForm } from "./choose-gigien-form";
-export { QuantitiItem } from "./quantiti-item"
+export { QuantitiItem } from "./quantiti-item";
+export { CartButton } from './cart-button';
+export { CartDrawer} from './cart-drawer';
+export { CountButton } from './count-button';
+export { CountIconButton } from './count-icon-button';
 export * from "./modals";
+
+
 
