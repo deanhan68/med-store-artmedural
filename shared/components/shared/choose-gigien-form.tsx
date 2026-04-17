@@ -17,23 +17,28 @@ interface Props {
     name:string;
     countProduct: CountProduct[];
     items: ProductItem[] ;
-    onClickAddCart?: VoidFunction;
+    loading?: boolean; 
+    onSubmit: (itemId : number, countProduct: number[]) => void;
     className?: string;
     
 
 }
-
+/**
+ * 
+ * Форма выбора ГИГИЕНЫ
+ */
 export const ChooseGigienForm: React.FC<Props> = ({  
     name, 
     items,
     imageUrl,
-    onClickAddCart, 
     countProduct,
+    loading,
+    onSubmit, 
     className, 
 }) => {
 
     // хук настроек
-    const {volue, gigienType, selectedCountProducts, availableVolues, setVolue, setGigienType, addQuantiti } =
+    const {volue, gigienType, selectedCountProducts, availableVolues, currentItemId, setVolue, setGigienType, addQuantiti } =
      useGigienOptions(items);
 
     // Калькуляция
@@ -46,12 +51,10 @@ export const ChooseGigienForm: React.FC<Props> = ({
     );
 
     const handleClick = () => {
-      onClickAddCart?.();
-      console.log({
-        volue,
-        gigienType,
-        countProduct: selectedCountProducts,
-      });
+      if(currentItemId) {
+        onSubmit(currentItemId, Array.from(selectedCountProducts));
+      }
+
     }
     
     return <div className={cn(className, 'flex w-full h-full')}>
@@ -103,6 +106,7 @@ export const ChooseGigienForm: React.FC<Props> = ({
 
 
       <Button 
+        loading={loading}
         onClick={handleClick} 
         className="h-[55px] px-10 text-base rounded-[11px] w-full mt-30 ">
         Добавить в корзину за {totalPrice} ₽

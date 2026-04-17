@@ -59,7 +59,7 @@ export const CartDrawer: React.FC<PropsWithChildren<Props>> = ({ children, class
 
 
                     <div className=" mt-5 overflow-auto flex-1">
-                        <div className="flex flex-col gap-4 mb-2">
+                        <div className="flex flex-col gap-2 mb-2">
                             {
                                 items.map((item) => (
                                 <CartDrawerItem

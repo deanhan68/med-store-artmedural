@@ -2,6 +2,7 @@ import { Container, Filters, Title } from "@/shared/components/shared";
 import { ProductsGroupList } from "@/shared/components/shared/product-group-list";
 import { TopBar } from "@/shared/components/shared/top-bar";
 import { prisma } from "@/prisma/prisma-client";
+import { Suspense } from "react";
 
 
 export default async function Home() {
@@ -34,7 +35,7 @@ export default async function Home() {
 
           {/* Фильтрация */}
           <div className="w-[250px]">
-            <Filters/>
+            <Suspense><Filters/></Suspense>
           </div>
 
 

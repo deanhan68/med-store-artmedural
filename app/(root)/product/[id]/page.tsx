@@ -19,14 +19,14 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     return (
     <Container className="flex  my-10">
         <div className="flex flex-1 ">
-            <GigienImage imageUrl={product.imageUrl} size={40} />
+            <GigienImage imageUrl={product.imageUrl} size={500} />
         </div>
 
         <div className="w-[490px] bg-[#f7f6f5] p-7 ">
             <Title text={product.name} size="md" className="font-extrabold mb-1"/>
             <p className="text-gray-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel quaerat iure quasi debitis quod. Quo vel, dolore dolores deleniti porro maxime cumque,</p>
             <GroupVariants 
-            selectedValue="2"
+            value="2"
             items={[
                 {
                     name:'Небольшой',
