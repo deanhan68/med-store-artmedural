@@ -111,7 +111,7 @@ model CartItem {
 
   
 
-  quantity Int
+  quantity Int @default(1)
 
 
   countProduct CountProduct[] // ingridients

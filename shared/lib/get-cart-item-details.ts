@@ -1,10 +1,12 @@
 import { CountProduct } from "@prisma/client";
 import { GigienType, GigienVolue } from "../constants/gigien";
+import { CartStateItem } from "./get-cart-details";
 
 export const getCartItemDetails = (
+    countProduct: CartStateItem['countProduct'],
     gigienType: GigienType,
     gigienVolue: GigienVolue,
-    countProduct: CountProduct[],
+    
 
 
 ) => {

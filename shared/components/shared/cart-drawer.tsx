@@ -4,9 +4,7 @@ import { Button } from "../ui/button";
 import { ArrowRight, ShoppingBasket } from "lucide-react";
 import {
     Sheet,
-    SheetClose,
     SheetContent,
-    SheetDescription,
     SheetFooter,
     SheetHeader,
     SheetTitle,
@@ -16,6 +14,9 @@ import {
 import Link from "next/link";
 import { CartDrawerItem } from "./cart-drawer-item";
 import { getCartItemDetails } from "@/shared/lib";
+import { useCartStore } from "@/shared/store";
+import { GigienType, GigienVolue } from "@/shared/constants/gigien";
+import { useShallow } from 'zustand/react/shallow';
 
 
 interface Props {
@@ -25,91 +26,56 @@ interface Props {
 /* cn('flex items-center justify-center flex-1 relative w-full') */
 
 export const CartDrawer: React.FC<PropsWithChildren<Props>> = ({ children, className}) => {
+
+    const [totalAmount, items, fetchCartItems, updateItemQuantity, removeCartItem, ] = useCartStore(
+        useShallow((state) => [
+          state.totalAmount,
+          state.items,
+          state.fetchCartItems,
+          state.updateItemQuantity,
+          state.removeCartItem,
+          
+        ]),
+      );
+
+    React.useEffect(()=> {
+        fetchCartItems();
+    }, [])
+
+    const onClickCountButton = (id: number, quantity: number, type: "plus" | "minus") => {
+        const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
+        updateItemQuantity(id, newQuantity);
+    }
+    
     return (
         <Sheet>
             <SheetTrigger asChild>{children}</SheetTrigger>
                 <SheetContent className="flex flex-col justify-between pb-0  sm:max-w-[30%] bg-[#F4F1EE]">
                     <SheetHeader>
                         <SheetTitle>
-                            В корзине <span className="font-bold">3 товара</span>
+                            В корзине <span className="font-bold">{items.length} товара</span>
                         </SheetTitle>
                     </SheetHeader>
 
 
                     <div className=" mt-5 overflow-auto flex-1">
-                        <div className="mb-2">
-                            <CartDrawerItem
-                            id={1}
-                            imageUrl={
-                                "http://artmedural.ru/image/cache/catalog/tovar/t02/t28/680f8a4a9c911b5b9af5e551c02cb10d-1100x1100.jpg"
-                            }
-                            details={getCartItemDetails(2,1000,[{name: "С дозатором"}, {name: "Мерный стакан"}])}
-                            name={'Кутасепт Ф'}
-                            price={250}
-                            quantity={1}
+                        <div className="flex flex-col gap-4 mb-2">
+                            {
+                                items.map((item) => (
+                                <CartDrawerItem
+                                key={item.id}
+                                id={item.id}
+                                imageUrl={ item.imageUrl}
+                                details={item.productSize && item.productType ? getCartItemDetails(item.countProduct, item.productType as GigienType, item.productSize as GigienVolue): ''}
+                                name={item.name}
+                                price={item.price}
+                                quantity={item.quantity}
+                                onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
+                                onClickRemove={() => removeCartItem(item.id)}
                             />
-                        </div>
-                        <div className="mb-2">
-                            <CartDrawerItem
-                            id={1}
-                            imageUrl={
-                                "http://artmedural.ru/image/cache/catalog/tovar/t02/t28/680f8a4a9c911b5b9af5e551c02cb10d-1100x1100.jpg"
+                                ))
                             }
-                            details={getCartItemDetails(2,1000,[{name: "С дозатором"}, {name: "Мерный стакан"}])}
-                            name={'Кутасепт Ф'}
-                            price={250}
-                            quantity={1}
-                            />
                         </div>
-                        <div className="mb-2">
-                            <CartDrawerItem
-                            id={1}
-                            imageUrl={
-                                "http://artmedural.ru/image/cache/catalog/tovar/t02/t28/680f8a4a9c911b5b9af5e551c02cb10d-1100x1100.jpg"
-                            }
-                            details={getCartItemDetails(2,1000,[{name: "С дозатором"}, {name: "Мерный стакан"}])}
-                            name={'Кутасепт Ф'}
-                            price={250}
-                            quantity={1}
-                            />
-                        </div>
-                        <div className="mb-2">
-                            <CartDrawerItem
-                            id={1}
-                            imageUrl={
-                                "http://artmedural.ru/image/cache/catalog/tovar/t02/t28/680f8a4a9c911b5b9af5e551c02cb10d-1100x1100.jpg"
-                            }
-                            details={getCartItemDetails(2,1000,[{name: "С дозатором"}, {name: "Мерный стакан"}])}
-                            name={'Кутасепт Ф'}
-                            price={250}
-                            quantity={1}
-                            />
-                        </div>
-                        <div className="mb-2">
-                            <CartDrawerItem
-                            id={1}
-                            imageUrl={
-                                "http://artmedural.ru/image/cache/catalog/tovar/t02/t28/680f8a4a9c911b5b9af5e551c02cb10d-1100x1100.jpg"
-                            }
-                            details={getCartItemDetails(2,1000,[{name: "С дозатором"}, {name: "Мерный стакан"}])}
-                            name={'Кутасепт Ф'}
-                            price={250}
-                            quantity={1}
-                            />
-                        </div>
-                        <div className="mb-2">
-                            <CartDrawerItem
-                            id={1}
-                            imageUrl={
-                                "http://artmedural.ru/image/cache/catalog/tovar/t02/t28/680f8a4a9c911b5b9af5e551c02cb10d-1100x1100.jpg"
-                            }
-                            details={getCartItemDetails(2,1000,[{name: "С дозатором"}, {name: "Мерный стакан"}])}
-                            name={'Кутасепт Ф'}
-                            price={250}
-                            quantity={1}
-                            />
-                        </div>
-
                     </div>
                 
                     <SheetFooter className=" bg-white p-8">
@@ -120,7 +86,7 @@ export const CartDrawer: React.FC<PropsWithChildren<Props>> = ({ children, class
                                     <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2"/>
                                 </span>
 
-                                <span className="font-bold text-lg">500 ₽</span>
+                                <span className="font-bold text-lg">{totalAmount} ₽</span>
                             </div>
 
                             <Link href='/cart'>
