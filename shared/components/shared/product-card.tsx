@@ -4,6 +4,7 @@ import { Title } from './title';
 import { Button } from '../ui';
 import { Plus } from 'lucide-react';
 import { cn } from '@/shared/lib/utils'; // Добавил импорт cn на всякий случай
+import { CountProduct } from '@prisma/client';
 
 interface Props {
     id: number;
@@ -11,10 +12,12 @@ interface Props {
     price: number;
     count?: number;
     imageUrl: string;
+    quantiti: CountProduct[];
     className?: string;
+
 }
 
-export const ProductCard: React.FC<Props> = ({ id, name, price, imageUrl, className }) => {
+export const ProductCard: React.FC<Props> = ({ id, name, price, imageUrl, quantiti, className }) => {
   return (
     // Добавляем h-full, чтобы все карточки в ряду были одной высоты
     <div className={cn("flex flex-col h-full", className)}>
@@ -29,7 +32,11 @@ export const ProductCard: React.FC<Props> = ({ id, name, price, imageUrl, classN
                 <Title text={name} size="sm" className="mb-1 font-bold line-clamp-2 min-h-[40px]" />
 
                 <p className="text-sm text-gray-400 line-clamp-3 flex-1">
-                    Стерильные. Пластырь медицинский фиксирующий гипоаллергенный из эластичной текстильной ткани. Пластырь медицинский фиксирующий гипоаллергенный из полиэтиленовой перфорированной пленки.
+                    {
+                        quantiti.map((quant) => (
+                            quant.name
+                        )).join(", ")
+                    }
                 </p>
 
                 {/* Этот блок теперь всегда будет в самом низу благодаря flex-1 выше */}

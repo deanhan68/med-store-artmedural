@@ -18,6 +18,8 @@ export const CartButton: React.FC<Props> = ({className}) => {
     const totalAmount = useCartStore((state) => state.totalAmount);
     const items = useCartStore((state) => state.items);
     const loading = useCartStore((state) => state.loading);
+
+    const totalCount = items.reduce((acc, item) => acc + item.quantity, 0);
     return (
         <CartDrawer>
             
@@ -26,7 +28,7 @@ export const CartButton: React.FC<Props> = ({className}) => {
                 <span className="h-full w-[1px] bg-white/30 mx-3"></span>
                 <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
                     <ShoppingBasket className="h-4 w-4 relative" strokeWidth={2}/>
-                    <b>{items.length}</b>
+                    <b>{totalCount}</b>
                 </div>
                 <ArrowRight size = {20} className="absolute right-5 transition duration-300 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"/>
             </Button>

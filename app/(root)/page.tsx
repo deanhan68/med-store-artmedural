@@ -1,22 +1,16 @@
 import { Container, Filters, Title } from "@/shared/components/shared";
 import { ProductsGroupList } from "@/shared/components/shared/product-group-list";
 import { TopBar } from "@/shared/components/shared/top-bar";
-import { prisma } from "@/prisma/prisma-client";
 import { Suspense } from "react";
+import { findGigiens, GetSearchParams } from "@/shared/lib/find-gigiens";
 
 
-export default async function Home() {
-
-  const categories = await prisma.category.findMany({
-    include : {
-      product: {
-        include : {
-          countProduct: true,
-          items: true,
-        },
-      },
-    }
-  })
+export default async function Home({ searchParams }: { searchParams: Promise<GetSearchParams> }) {
+  // ОБЯЗАТЕЛЬНО: ждем получения параметров из URL
+  const params = await searchParams;
+  
+  // Передаем уже "готовые" параметры в функцию поиска
+  const categories = await findGigiens(params);
 
 
 

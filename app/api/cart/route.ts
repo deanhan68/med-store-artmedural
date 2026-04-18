@@ -5,7 +5,6 @@ import { findOrCreateCart } from '@/shared/lib';
 import { CreateCartItemValues } from '@/shared/services/dto/cart.dto';
 import { updateCartTotalAmount } from '@/shared/lib/update-cart-total-amount';
 
-
 export async function GET(req: NextRequest) {
   try {
     const token = req.cookies.get('cartToken')?.value;
@@ -16,33 +15,29 @@ export async function GET(req: NextRequest) {
 
     const userCart = await prisma.cart.findFirst({
       where: {
-        OR: [
-            {
-                token,
-            }
-        ]
+        token,
       },
       include: {
         items: {
-            orderBy: {
-                createdAt: 'desc',
+          orderBy: {
+            createdAt: 'desc',
+          },
+          include: {
+            productItem: {
+              include: {
+                product: true,
+              },
             },
-            include: {
-                productItem: {
-                    include: {
-                        product: true,
-                    }
-                },
-                countProduct: true,
-            },
-        },  
-    },  
-});
+            countProduct: true,
+          },
+        },
+      },
+    });
 
     return NextResponse.json(userCart);
   } catch (error) {
-    console.log('[CART_GET] Server error', error);
-    return NextResponse.json({ message: 'Не удалось получить корзину'}, {status: 500})
+    console.error('[CART_GET] Server error', error);
+    return NextResponse.json({ message: 'Не удалось получить корзину' }, { status: 500 });
   }
 }
 
@@ -52,58 +47,64 @@ export async function POST(req: NextRequest) {
 
     if (!token) {
       token = crypto.randomUUID();
-
     }
 
     const userCart = await findOrCreateCart(token);
-
     const data = (await req.json()) as CreateCartItemValues;
-    
 
-    const findCartItem = await prisma.cartItem.findFirst({
+    // 1. Получаем ВСЕ товары из корзины с таким productItemId
+    const cartItems = await prisma.cartItem.findMany({
       where: {
         cartId: userCart.id,
         productItemId: data.productItemId,
-        countProduct: { every : {id: {in: data.countProduct}}},
+      },
+      include: {
+        countProduct: true,
       },
     });
-    // Если товар был найден делаем + 1
+
+    // 2. Ищем среди них тот, у которого набор допов В ТОЧНОСТИ совпадает с пришедшим
+    const findCartItem = cartItems.find((item) => {
+      // Собираем ID текущих допов в базе и сортируем их
+      const currentItemIds = item.countProduct.map((cp) => cp.id).sort((a, b) => a - b);
+      // Собираем ID допов из запроса и сортируем их
+      const newItemIds = (data.countProduct || []).sort((a, b) => a - b);
+      
+      // Сравниваем два массива как строки
+      return JSON.stringify(currentItemIds) === JSON.stringify(newItemIds);
+    });
+
     if (findCartItem) {
+      // Если нашли полное совпадение — обновляем количество
       await prisma.cartItem.update({
-        where: {
-          id: findCartItem.id,
-        },
-        data : {
-          quantity: findCartItem.quantity + 1,
+        where: { id: findCartItem.id },
+        data: { quantity: findCartItem.quantity + 1 },
+      });
+    } else {
+      // Если не нашли — создаем новую позицию
+      await prisma.cartItem.create({
+        data: {
+          cartId: userCart.id,
+          productItemId: data.productItemId,
+          quantity: 1,
+          countProduct: { 
+            connect: data.countProduct?.map((id) => ({ id })) 
+          },
         },
       });
     }
 
-
-    await prisma.cartItem.create({
-      data: {
-        cartId: userCart.id,
-        productItemId: data.productItemId,
-        quantity: 1,
-        countProduct: { connect: data.countProduct?.map((id) => ({id}))},
-      },
-
-    });
-
-
-
     const updatedUserCart = await updateCartTotalAmount(token);
-
     const resp = NextResponse.json(updatedUserCart);
-    resp.cookies.set('cartToken', token);
+    
+    resp.cookies.set('cartToken', token, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 30,
+    });
+    
     return resp;
   } catch (error) {
-    console.log('[CART_POST] Server error', error);
-    return NextResponse.json({ message: 'Не удалось создать корзину'}, {status: 500})
-    
+    console.error('[CART_POST] Server error', error);
+    return NextResponse.json({ message: 'Не удалось добавить товар в корзину' }, { status: 500 });
   }
 }
-
-
-
-

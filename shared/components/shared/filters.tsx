@@ -37,23 +37,22 @@ export const Filters: React.FC<Props> = ({ className }) => {
           onClickCheckbox={filters.setSterTypes}
           selected={filters.sterTypes}
           items={[
-            {text: 'Стерильно', value: '1'},
-            {text: 'Не стерильно', value: '2'},
+            {text: 'Стерильный блок', value: '1'},
+            {text: 'Стандартная упаковка', value: '2'},
           ]}
           
         />      
 
         <CheckboxFiltersGroup 
           title="Объем"
-          name="Volue"
+          name="volues"
           className="mb-5"
           onClickCheckbox={filters.setVolues}
           selected={filters.volues}
           items={[
-            {text: '0,5 л.', value: '0.5'},
-            {text: '1 л.', value: '1'},
-            {text: '1,5 л.', value: '1.5'},
-            {text: '2 л.', value: '2'},
+            {text: '0,5 л.', value: '500'},  // Если в базе мл
+            {text: '1 л.', value: '1000'},
+            {text: '2 л.', value: '2000'},
           ]}
           
         />      
@@ -70,7 +69,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
               type="number"
               placeholder="0"
               min={0}
-              max={30000}
+              max={2000}
               value={String(filters.prices.priceFrom)}
               onChange = {(e) => filters.setPrices('priceFrom', Number(e.target.value))}
             />
@@ -78,8 +77,8 @@ export const Filters: React.FC<Props> = ({ className }) => {
             <Input
               type="number"
               min={300}
-              max={30000}
-              placeholder="30000"
+              max={2000}
+              placeholder="2000"
               value={String(filters.prices.priceTo)}
               onChange = {(e) => filters.setPrices('priceTo', Number(e.target.value))}
             />
@@ -87,7 +86,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
             </div>
               <RangeSlider 
                 min={0} 
-                max={30000} 
+                max={2000} 
                 step={100} 
                 value= {[filters.prices.priceFrom || 0, filters.prices.priceTo || 30000]} 
                 onValueChange={updatePrices}

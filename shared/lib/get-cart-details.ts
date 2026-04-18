@@ -8,6 +8,7 @@ export type CartStateItem = {
     name: string;
     imageUrl: string;
     price: number;
+    disabled:boolean;
     productSize?: number | null;
     productType?: number | null;
     countProduct: Array<{name: string, price: number}>;
@@ -16,6 +17,7 @@ export type CartStateItem = {
 interface ReturnProps {
     items: CartStateItem[];
     totalAmount: number;
+    disabled: boolean;
 }
 export const getCartDetails =  (data: CartDTO): ReturnProps => {
     const items = data.items.map((item) => ({
@@ -26,14 +28,16 @@ export const getCartDetails =  (data: CartDTO): ReturnProps => {
         price: calcCartItemTotalPrice(item),
         productSize: item.productItem.size,
         productType: item.productItem.productType,
+        disabled: false,
         countProduct: item.countProduct.map((quantiti) => ({
             name: quantiti.name,
             price: quantiti.price,
         })),
-    }))
+    })) as CartStateItem[];
 
     return {
         items,
+        disabled: false,
         totalAmount: data.totalAmount,
     };
 };
