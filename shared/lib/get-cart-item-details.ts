@@ -4,8 +4,8 @@ import { CartStateItem } from "./get-cart-details";
 
 export const getCartItemDetails = (
     countProduct: CartStateItem['countProduct'],
-    gigienType: GigienType,
-    gigienVolue: GigienVolue,
+    gigienType?: GigienType,
+    gigienVolue?: GigienVolue,
     
 
 

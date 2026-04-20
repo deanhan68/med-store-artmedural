@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "../globals.css"
-import { Header } from "@/shared/components/shared/header";
+
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -20,11 +20,7 @@ export default function DashboardLayout({ children, }: Readonly<{ children: Reac
     <html lang="en">
       <body
         className={nunito.className}>
-          <main className="min-h-screen">
-
-            {children}
-          </main>
-
+          <main className="min-h-screen">{children}</main>
       </body>
     </html>
   );
