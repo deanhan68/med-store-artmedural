@@ -30,7 +30,7 @@ export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, classNa
                 loading ? (
                  <Skeleton className='w-48 h-11'/>
                   ): ( 
-                  <span className="text-[32px] font-extrabold">{totalPrice} ₽</span>
+                  <span className="h-11 text-[32px] font-extrabold">{totalPrice} ₽</span>
             )}
         </div>
 

@@ -6,6 +6,7 @@ import { WhiteBlock } from "../white-block";
 
 interface Props {
     className?: string;
+    
 }
 
 export const CheckoutPersonalForm: React.FC<Props> = ({ className }) => {

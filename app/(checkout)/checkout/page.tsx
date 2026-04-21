@@ -9,6 +9,7 @@ import { CheckoutCart } from "@/shared/components/shared/checkout/checkout-cart"
 import { CheckoutPersonalForm } from "@/shared/components/shared/checkout/checkout-personal-form";
 import { CheckoutAddressForm } from "@/shared/components/shared/checkout";
 import { checkoutFormSchema, CheckoutFormValues } from "@/shared/constants/checkout-form-schema";
+import { cn } from "@/shared/lib/utils";
 
 
 
@@ -58,9 +59,10 @@ export default function CheckoutPage() {
                 onClickCountButton={onClickCountButton} 
                 removeCartItem={removeCartItem} 
                 items={items}
+                loading={loading}
               />
-              <CheckoutPersonalForm />
-              <CheckoutAddressForm/>
+              <CheckoutPersonalForm className={cn({"opacity-40 pointer-events-none" : loading})}/>
+              <CheckoutAddressForm className={cn({"opacity-40 pointer-events-none" : loading})} />
             </div>
 
             {/* Правая часть: Итоговый блок */}
