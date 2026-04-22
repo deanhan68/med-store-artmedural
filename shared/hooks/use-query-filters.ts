@@ -23,6 +23,7 @@ export const useQueryFilters = (filters: Filters) => {
             router.push(`?${query}`, {
                 scroll: false
             });
+
             
             console.log('✅ URL обновлен (запрос отправлен)');
         }, 300); // 300мс — золотой стандарт для фильтров

@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from "@/shared/lib/utils";
 import React from "react";
 import { Container } from "./container";
@@ -7,6 +9,9 @@ import { User } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
 import { CartButton } from "./cart-button";
+import { useSearchParam } from "react-use";
+import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 
 interface Props {
@@ -16,6 +21,18 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ hasSearch = true, className, hasCart = true }) => {
+
+    const searchParams = useSearchParams()
+
+    React.useEffect(() => {
+        console.log(searchParams.has('paid'), 999);
+        if (searchParams.has("paid")) {
+            setTimeout(() => {
+                toast.success('Заказ оплачен, информация отправлена на почту.');
+            }, 300)
+            
+        }
+    }, [])
     return (
         <header className={cn('bg-white', className)}>
             <Container 
