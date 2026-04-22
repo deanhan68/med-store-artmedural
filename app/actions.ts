@@ -3,10 +3,14 @@
 import { prisma } from '@/prisma/prisma-client';
 import { PayOrderTemplate } from '@/shared/components/shared/email-templates';
 import { CheckoutFormValues } from '@/shared/constants';
-import { sendEmail } from '@/shared/lib';
+import { createPayment, sendEmail } from '@/shared/lib';
 import { OrderStatus } from '@prisma/client';
 import { cookies } from 'next/headers';
 import React from 'react';
+
+// Константы такие же, как в твоем CheckoutSidebar
+const DISCOUNT_PERCENT = 15;
+const DELIVERY_PRICE = 250;
 
 export async function createOrder(data: CheckoutFormValues) {
   try {
@@ -17,6 +21,7 @@ export async function createOrder(data: CheckoutFormValues) {
       throw new Error('Cart token not found');
     }
 
+    /* 1. Получаем корзину пользователя */
     const userCart = await prisma.cart.findFirst({
       where: { token: cartToken },
       include: {
@@ -35,6 +40,11 @@ export async function createOrder(data: CheckoutFormValues) {
       throw new Error('Cart is empty');
     }
 
+    /* 2. Рассчитываем финальную сумму (как в сайдбаре) */
+    const discountPrice = Math.round((userCart.totalAmount * DISCOUNT_PERCENT) / 100);
+    const totalPrice = userCart.totalAmount - discountPrice + DELIVERY_PRICE;
+
+    /* 3. Создаем заказ в базе данных */
     const order = await prisma.order.create({
       data: {
         token: cartToken,
@@ -43,12 +53,13 @@ export async function createOrder(data: CheckoutFormValues) {
         phone: data.phone,
         address: data.address,
         comment: data.comment,
-        totalAmount: userCart.totalAmount,
+        totalAmount: totalPrice, // Теперь тут сумма со скидкой и доставкой
         status: OrderStatus.PENDING,
         items: JSON.stringify(userCart.items),
       },
     });
 
+    /* 4. Очищаем корзину после создания заказа */
     await prisma.cart.update({
       where: { id: userCart.id },
       data: { totalAmount: 0 },
@@ -58,25 +69,43 @@ export async function createOrder(data: CheckoutFormValues) {
       where: { cartId: userCart.id },
     });
 
-    try {
-      await sendEmail(
-        data.email,
-        `ArtMedUral | Оплатите заказ №${order.id}!`,
-        React.createElement(PayOrderTemplate, {
-          orderId: order.id,
-          totalAmount: order.totalAmount,
-          paymentUrl: 'https://resend.com/docs/send-with-nextjs',
-          items: userCart.items,
-        })
-      );
-    } catch (error) {
-      console.error('[EMAIL_ERROR]', error);
+    /* 5. Создаем платеж в ЮKassa */
+    const paymentData = await createPayment({
+      amount: order.totalAmount, // Сюда улетит уже правильная сумма (totalPrice)
+      orderId: order.id,
+      description: 'Оплата заказа #' + order.id,
+    });
+
+    if (!paymentData) {
+      throw new Error('Payment data not found');
     }
 
-    return 'https://resend.com/docs/send-with-nextjs';
+    /* 6. Сохраняем ID платежа в заказ для будущего отслеживания */
+    await prisma.order.update({
+      where: { id: order.id },
+      data: {
+        paymentId: paymentData.id,
+      },
+    });
+
+    const paymentUrl = paymentData.confirmation.confirmation_url;
+
+    /* 7. Отправляем письмо пользователю с кнопкой оплаты */
+    await sendEmail(
+      data.email,
+      `ArtMedUral | Оплатите заказ №${order.id}!`,
+      React.createElement(PayOrderTemplate, {
+        orderId: order.id,
+        totalAmount: order.totalAmount,
+        paymentUrl,
+      })
+    );
+
+    /* 8. Возвращаем ссылку на ЮKassa для редиректа */
+    return paymentUrl;
 
   } catch (err) {
     console.log('[createOrder] Server error', err);
-    throw err; 
+    throw err;
   }
 }
