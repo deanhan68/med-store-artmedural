@@ -4,15 +4,13 @@ import { cn } from "@/shared/lib/utils";
 import React from "react";
 import { Container } from "./container";
 import Image from 'next/image'
-import { Button } from "../ui/button";
-import { User } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
 import { CartButton } from "./cart-button";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import { useSession, signIn } from "next-auth/react";
 import { ProfileButton } from "./profile-button";
+import { AuthModal } from "./modals";
 
 
 
@@ -23,6 +21,7 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ hasSearch = true, className, hasCart = true }) => {
+    const [ openAuthModal, setOpenAuthModal ] = React.useState(false);
     const searchParams = useSearchParams();
 
 
@@ -67,7 +66,8 @@ export const Header: React.FC<Props> = ({ hasSearch = true, className, hasCart =
 
                 {/* Правая часть: Профиль и Корзина */}
                 <div className={cn("flex items-center gap-3", !hasSearch && "ml-auto")}>
-                    <ProfileButton/>
+                    <AuthModal open={openAuthModal} onClose={() => setOpenAuthModal(false)} />
+                    <ProfileButton onClickSignIn={() => setOpenAuthModal(true)}/>
                     {hasCart && <CartButton className="rounded-2xl" />}
                 </div>
 

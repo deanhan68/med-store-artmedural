@@ -1,0 +1,95 @@
+'use client';
+
+import React from 'react';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/shared/components/ui/dialog';
+import { Button } from '@/shared/components/ui/button';
+import { signIn } from 'next-auth/react';
+import { LoginForm } from './forms/login-form';
+
+interface Props {
+  open: boolean;
+  onClose: () => void;
+}
+
+export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
+  // Добавляем стейт для отслеживания монтирования компонента
+  const [mounted, setMounted] = React.useState(false);
+  const [type, setType] = React.useState<'login' | 'register'>('login');
+
+  // Эффект сработает только в браузере после первой отрисовки
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const onSwitchType = () => {
+    setType(type === 'login' ? 'register' : 'login');
+  };
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  // Если мы еще на сервере, ничего не рендерим, чтобы избежать конфликта ID
+  if (!mounted) {
+    return null;
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent className="w-[450px] bg-white p-10 rounded-3xl">
+        {type === "login" ? <LoginForm onClose={handleClose}/> : <h1>REGISTERED</h1>}
+        <hr/>
+        <DialogTitle className="hidden">Авторизация</DialogTitle>
+        <DialogDescription className="hidden">
+          Войдите в свой аккаунт через GitHub или Google
+        </DialogDescription>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-2">
+            <Button
+              variant="secondary"
+              onClick={() =>
+                signIn('github', {
+                  callbackUrl: '/',
+                  redirect: true,
+                })
+              }
+              type="button"
+              className="gap-2 h-12 p-2 flex-1"
+            >
+              <img 
+                className="w-6 h-6" 
+                src="https://github.githubassets.com/favicons/favicon.svg" 
+                alt="GitHub"
+              />
+              GitHub
+            </Button>
+
+            <Button
+              variant="secondary"
+              onClick={() =>
+                signIn('google', {
+                  callbackUrl: '/',
+                  redirect: true,
+                })
+              }
+              type="button"
+              className="gap-2 h-12 p-2 flex-1"
+            >
+              <img
+                className="w-6 h-6"
+                src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"
+                alt="Google"
+              />
+              Google
+            </Button>
+          </div>
+        </div>
+
+        <Button variant="outline" onClick={onSwitchType} type="button" className="h-12">
+          {type !== 'login' ? 'Войти' : 'Регистрация'}
+        </Button>
+      </DialogContent>
+    </Dialog>
+  );
+};
