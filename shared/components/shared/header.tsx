@@ -9,9 +9,11 @@ import { User } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
 import { CartButton } from "./cart-button";
-import { useSearchParam } from "react-use";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
+import { useSession, signIn } from "next-auth/react";
+import { ProfileButton } from "./profile-button";
+
 
 
 interface Props {
@@ -21,11 +23,10 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ hasSearch = true, className, hasCart = true }) => {
+    const searchParams = useSearchParams();
 
-    const searchParams = useSearchParams()
 
     React.useEffect(() => {
-        console.log(searchParams.has('paid'), 999);
         if (searchParams.has("paid")) {
             setTimeout(() => {
                 toast.success('Заказ оплачен, информация отправлена на почту.');
@@ -66,10 +67,7 @@ export const Header: React.FC<Props> = ({ hasSearch = true, className, hasCart =
 
                 {/* Правая часть: Профиль и Корзина */}
                 <div className={cn("flex items-center gap-3", !hasSearch && "ml-auto")}>
-                    <Button variant="outline" className="flex items-center gap-2 rounded-2xl">
-                        <User size={16} />
-                        Войти
-                    </Button>
+                    <ProfileButton/>
                     {hasCart && <CartButton className="rounded-2xl" />}
                 </div>
 
