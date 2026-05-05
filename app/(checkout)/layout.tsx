@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "../globals.css"
 import { Container, Header } from "@/shared/components/shared";
+import { Suspense } from "react";
 
 
 const nunito = Nunito({
@@ -23,7 +24,9 @@ export default function CheckoutLayout({ children, }: Readonly<{ children: React
         {/* Убираем border-b отсюда */}
         <Header hasSearch={false} hasCart={false} className="bg-[#EEF1F4]"/>
         <Container>
-            {children}
+            <Suspense fallback={<div>Загрузка оформления...</div>}>
+                {children}
+            </Suspense>
         </Container>
     </main>
   );
