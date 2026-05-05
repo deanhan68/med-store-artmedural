@@ -26,7 +26,6 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt      DateTime @updatedAt
 
-
 }
 
 model Category {
@@ -45,6 +44,7 @@ model Product {
 
   name      String
   imageUrl  String
+  description String?
 
   countProduct CountProduct[]
   items ProductItem[]
@@ -99,28 +99,6 @@ model Cart {
   updatedAt DateTime @updatedAt
 }
 
-model CartItem {
-  id        Int      @id @default(autoincrement())
-
-  cart Cart @relation(fields: [cartId], references: [id])
-  cartId Int
-
-
-  productItem ProductItem @relation(fields: [productItemId], references: [id])
-  productItemId Int
-
-  
-
-  quantity Int @default(1)
-
-
-  countProduct CountProduct[] // ingridients
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-}
-
 model Order {
   id        Int      @id @default(autoincrement())
 
@@ -146,6 +124,27 @@ model Order {
 
 }
 
+model CartItem {
+  id        Int      @id @default(autoincrement())
+
+  cart Cart @relation(fields: [cartId], references: [id])
+  cartId Int
+
+
+  productItem ProductItem @relation(fields: [productItemId], references: [id])
+  productItemId Int
+
+  
+
+  quantity Int @default(1)
+
+
+  countProduct CountProduct[] // ingridients
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
 
 model VerificationCode {
     id        Int      @id @default(autoincrement())

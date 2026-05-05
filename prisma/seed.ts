@@ -66,38 +66,33 @@ async function up() {
   const gigiena1 = await prisma.product.create({
     data: {
       name:'АВАНСЕПТ АКТИВ',
-      imageUrl: 
-      'http://artmedural.ru/image/cache/catalog/tovar/t02/t28/xavansept-aktiv-1-litr.jpg.pagespeed.ic.ycekifye05-1100x1100w.jpg',
+      description: 'Концентрированное дезинфицирующее средство с моющим эффектом. Флакон 1 литр. Безопасно для инструментов из любых материалов.',
+      imageUrl: 'http://artmedural.ru/image/cache/catalog/tovar/t02/t28/xavansept-aktiv-1-litr.jpg.pagespeed.ic.ycekifye05-1100x1100w.jpg',
       categoryId: 1,
-      countProduct : {
-        connect: countProduct.slice(0, 5)
-      },
+      countProduct : { connect: countProduct.slice(0, 5) },
     }
   })
 
   const gigiena2 = await prisma.product.create({
     data: {
-      name:'Кутасепт Ф ',
-      imageUrl: 
-      'http://artmedural.ru/image/cache/catalog/tovar/t02/t28/680f8a4a9c911b5b9af5e551c02cb10d-1100x1100.jpg',
+      name:'Кутасепт Ф',
+      description: 'Готовый спиртовой антисептик для кожи. Широкий спектр действия. Флакон с распылителем обеспечивает экономичный расход.',
+      imageUrl: 'http://artmedural.ru/image/cache/catalog/tovar/t02/t28/680f8a4a9c911b5b9af5e551c02cb10d-1100x1100.jpg',
       categoryId: 1,
-      countProduct : {
-        connect: countProduct.slice(0, 5)
-      },
+      countProduct : { connect: countProduct.slice(0, 5) },
     }
   })
 
   const gigiena3 = await prisma.product.create({
     data: {
       name:'Фолицид Ультра',
-      imageUrl: 
-      'http://artmedural.ru/image/cache/catalog/tovar/t02/t28/6f61b3a50f24e6a33ddc2d1f949e743b-1100x1100.jpg',
+      description: 'Средство последнего поколения для дезинфекции и стерилизации ИМН. Высокая стабильность рабочих растворов.',
+      imageUrl: 'http://artmedural.ru/image/cache/catalog/tovar/t02/t28/6f61b3a50f24e6a33ddc2d1f949e743b-1100x1100.jpg',
       categoryId: 1, 
-      countProduct : {
-        connect: countProduct.slice(0, 5)
-      },
+      countProduct : { connect: countProduct.slice(0, 5) },
     }
   })
+  
   await prisma.productItem.createMany({
     data :[
 
