@@ -8,12 +8,19 @@ interface Props {
 }
 
 export async function createPayment(details: Props) {
+  const shopId = process.env.YOOKASSA_SHOP_ID;
+  const apiKey = process.env.YOOKASSA_API_KEY;
+
+  // Проверка прямо в коде, чтобы мы видели ошибку в логах, если ключей нет
+  if (!shopId || !apiKey) {
+    throw new Error(`[Create Payment] Missing credentials. ShopID: ${!!shopId}, APIKey: ${!!apiKey}`);
+  }
+
   const { data } = await axios.post<PaymentData>(
     'https://api.yookassa.ru/v3/payments',
     {
       amount: {
-        // Обязательно приводим к строке, иначе ЮKassa вернет ошибку
-        value: details.amount.toFixed(2), 
+        value: details.amount.toFixed(2),
         currency: 'RUB',
       },
       capture: true,
@@ -27,15 +34,11 @@ export async function createPayment(details: Props) {
       },
     },
     {
-      auth: {
-        // ЛОГИН — это твой ShopID (из последнего скриншота)
-        username: process.env.YOOKASSA_SHOP_ID as string,
-        // ПАРОЛЬ — это твой секретный ключ (API-KEY)
-        password: process.env.YOOKASSA_API_KEY as string,
-      },
       headers: {
         'Idempotence-Key': Math.random().toString(36).substring(7),
         'Content-Type': 'application/json',
+        // Передаем авторизацию через заголовок напрямую (это надежнее)
+        Authorization: 'Basic ' + Buffer.from(`${shopId}:${apiKey}`).toString('base64'),
       },
     },
   );
