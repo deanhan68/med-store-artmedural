@@ -30,7 +30,7 @@ export async function createPayment(details: Props) {
       },
       confirmation: {
         type: 'redirect',
-        return_url: process.env.YOOKASSA_CALLBACK_URL || 'http://localhost:3000/?paid',
+        return_url: process.env.YOOKASSA_CALLBACK_URL || 'https://med-store-artmedural.vercel.app/?paid',
       },
     },
     {
