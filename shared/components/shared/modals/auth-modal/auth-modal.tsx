@@ -47,11 +47,11 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
         <hr/>
         <DialogTitle className="hidden">Авторизация</DialogTitle>
         <DialogDescription className="hidden">
-          Войдите в свой аккаунт через GitHub или Google
+          Войдите в свой аккаунт через GitHub
         </DialogDescription>
 
         <div className="flex flex-col gap-4">
-          <div className="flex gap-2">
+          <div className="flex">
             <Button
               variant="secondary"
               onClick={() =>
@@ -61,7 +61,7 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
                 })
               }
               type="button"
-              className="gap-2 h-12 p-2 flex-1"
+              className="gap-2 h-12 p-2 w-full" // Сделали кнопку во всю ширину окна
             >
               <img 
                 className="w-6 h-6" 
@@ -69,25 +69,6 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
                 alt="GitHub"
               />
               GitHub
-            </Button>
-
-            <Button
-              variant="secondary"
-              onClick={() =>
-                signIn('google', {
-                  callbackUrl: '/',
-                  redirect: true,
-                })
-              }
-              type="button"
-              className="gap-2 h-12 p-2 flex-1"
-            >
-              <img
-                className="w-6 h-6"
-                src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"
-                alt="Google"
-              />
-              Google
             </Button>
           </div>
         </div>
