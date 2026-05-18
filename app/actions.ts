@@ -50,7 +50,7 @@ export async function createOrder(data: CheckoutFormValues) {
     const discountPrice = Math.round((userCart.totalAmount * DISCOUNT_PERCENT) / 100);
     const totalPrice = userCart.totalAmount - discountPrice + DELIVERY_PRICE;
 
-    /* 2. Создаем заказ */
+    /* 2. Создаем заказ сразу со статусом ОПЛАЧЕН */
     const order = await prisma.order.create({
       data: {
         userId, 
@@ -61,8 +61,8 @@ export async function createOrder(data: CheckoutFormValues) {
         address: data.address,
         comment: data.comment,
         totalAmount: totalPrice,
-        status: OrderStatus.PENDING,
-        items: JSON.stringify(userCart.items), // Здесь теперь лежит и product.description
+        status: OrderStatus.SUCCEEDED, // Изменили с PENDING на SUCCEEDED
+        items: JSON.stringify(userCart.items), 
       },
     });
 
@@ -186,10 +186,12 @@ export async function registerUser(body: Prisma.UserCreateInput) {
       data: { code, userId: createdUser.id },
     });
 
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
     await sendEmail(
       createdUser.email,
       `ArtMedUral / 📝 Подтверждение регистрации`,
-      VerificationUserTemplate({ code }),
+      VerificationUserTemplate({ code: `${baseUrl}/api/auth/verify?code=${code}` }),
     );
   } catch (err) {
     console.log('Error [CREATE_USER]', err);
